@@ -5,7 +5,7 @@ read IP
 printf "Update packages\n"
 sudo yum update -y
 
-printf "Install Apache 2.4, PHP 7.0 & MySql 5.6\n"
+printf "Install NGINX, PHP 7.0 & MySql 5.6\n"
 sudo yum install -y nginx php70 mysql56-server
 
 printf "Install PHP extensions\n"
@@ -279,8 +279,8 @@ sudo usermod -a -G www ec2-user
 printf "Adding FTP user...\n"
 sudo adduser -G www magento
 sudo passwd magento <<EOF
-aXCT5Nukz93C4SyH
-aXCT5Nukz93C4SyH
+abcd2017
+abcd2017
 EOF
 
 printf "Set user home directory\n"
@@ -288,10 +288,10 @@ sudo usermod -d /var/www/ magento
 sudo chown -R root:www /var/www
 
 printf "Download Magento to home directory\n"
-wget http://www.wuzaixiang.com/dist/Magento-CE-2.1.5.tar.bz2
+wget http://www.wuzaixiang.com/dist/Magento-CE-2.1.8.tar.bz2
 
 printf "Extract Magento to home directory\n"
-sudo tar xjf Magento-CE-2.1.5.tar.bz2 -C /var/www/html
+sudo tar xjf Magento-CE-2.1.8.tar.bz2 -C /var/www/html
 
 printf "Set home directory permission\n"
 sudo chmod -R 777 /var/www
