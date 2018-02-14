@@ -288,7 +288,7 @@ sudo usermod -d /var/www/ magento
 sudo chown -R root:www /var/www
 
 printf "Download Magento to home directory\n"
-wget http://www.wuzaixiang.com/dist/Magento-CE-2.1.8.tar.bz2
+wget https://github.com/nothywu/magento-2-auto-deployment/blob/master/Magento-CE-2.2.2-2017-12-11-09-25-03.tar.bz2
 
 printf "Extract Magento to home directory\n"
 sudo tar xjf Magento-CE-2.1.8.tar.bz2 -C /var/www/html
