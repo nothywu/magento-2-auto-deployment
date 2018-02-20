@@ -314,7 +314,7 @@ printf "Set user home directory\n"
 sudo chown -R nginx:nginx /var/www
 
 printf "Download Magento to home directory\n"
-wget https://github.com/nothywu/magento-2-auto-deployment/blob/master/Magento-CE-2.2.2-2017-12-11-09-25-03.tar.bz2
+wget https://raw.githubusercontent.com/nothywu/magento-2-auto-deployment/master/Magento-CE-2.2.2-2017-12-11-09-25-03.tar.bz2
 
 printf "Extract Magento to home directory\n"
 sudo tar xjf Magento-CE-2.2.2-2017-12-11-09-25-03.tar.bz2 -C /var/www/html
