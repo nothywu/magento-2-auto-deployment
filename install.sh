@@ -255,6 +255,9 @@ sudo rm -f /etc/nginx/nginx.conf
 sudo cp -f ~/nginx.conf /etc/nginx/nginx.conf
 sudo cp -f ~/magento.conf /etc/nginx/default.d/magento.conf
 
+sudo sed -i "s/user = apache/user = nginx/g" /etc/php-fpm-7.0.d/www.conf
+sudo sed -i "s/group = apache/group = nginx/g" /etc/php-fpm-7.0.d/www.conf
+
 printf "Install vsftp\n"
 sudo yum install -y vsftpd
 
