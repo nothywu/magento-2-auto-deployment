@@ -10,10 +10,14 @@ sudo yum install -y nginx php70 mysql56-server
 
 printf "Install PHP extensions\n"
 sudo yum install -y php70-mysqlnd php70-mcrypt php70-intl php70-mbstring php70-gzip php70-gd2 php70-zip php70-gd php70-xml php70-pdo php70-pecl-apcu php70-opcache php70-fpm
+sudo yum install -y expect
 
 printf "Install composer\n"
 sudo curl -sS https://getcomposer.org/installer | sudo php
 sudo mv composer.phar /usr/local/bin/composer
+
+ROOT_PASSWORD=abcd1234
+MYSQL_PASSWORD=abcd1234
 
 printf "Config nginx\n"
 ################### nginx configuration ###################
@@ -258,34 +262,61 @@ sudo chkconfig vsftpd on
 sudo chkconfig php-fpm start
 
 printf "Setting mysql server\n"
-mysql_secure_installation <<EOF
 
-y
-oZakNGmcxHjto97x
-oZakNGmcxHjto97x
-y
-n
-n
-y
-EOF
+SECURE_MYSQL=$(expect -c "
+set timeout 10
+spawn mysql_secure_installation
+expect \"Enter current password for root (enter for none):\"
+send \"\r\"
+expect \"Change the root password?\"
+send \"y\r\"
+expect \"New password:\"
+send \"$MYSQL_PASSWORD\r\"
+expect \"Re-enter new password:\"
+send \"$MYSQL_PASSWORD\r\"
+expect \"Remove anonymous users?\"
+send \"y\r\"
+expect \"Disallow root login remotely?\"
+send \"y\r\"
+expect \"Remove test database and access to it?\"
+send \"y\r\"
+expect \"Reload privilege tables now?\"
+send \"y\r\"
+expect eof
+")
+
+echo "$SECURE_MYSQL"
+
+#mysql_secure_installation <<EOF
+#
+#y
+#oZakNGmcxHjto97x
+#oZakNGmcxHjto97x
+#y
+#n
+#n
+#y
+#EOF
 
 printf "Create database for Magento\n"
-mysql -u root -poZakNGmcxHjto97x -e "CREATE DATABASE magento;"
+mysql -u root -p$MYSQL_PASSWORD -e "CREATE DATABASE magento;"
 
 printf "Set user group\n"
-sudo groupadd www
-sudo usermod -a -G www ec2-user
+sudo groupadd nginx
+sudo usermod -a -G nginx ec2-user
 
 printf "Adding FTP user...\n"
-sudo adduser -G www magento
-sudo passwd magento <<EOF
-abcd2017
-abcd2017
-EOF
+sudo useradd -g nginx -d /var/www/ -s /bin/bash -p $(echo $ROOT_PASSWORD | openssl passwd -1 -stdin) magento
+
+#sudo adduser -G nginx magento
+#sudo passwd magento <<EOF
+#abcd2017
+#abcd2017
+#EOF
 
 printf "Set user home directory\n"
-sudo usermod -d /var/www/ magento
-sudo chown -R root:www /var/www
+#sudo usermod -d /var/www/ magento
+sudo chown -R root:nginx /var/www
 
 printf "Download Magento to home directory\n"
 wget https://github.com/nothywu/magento-2-auto-deployment/blob/master/Magento-CE-2.2.2-2017-12-11-09-25-03.tar.bz2
@@ -298,7 +329,7 @@ sudo chmod -R 777 /var/www
 
 printf "Install Magento\n"
 cd /var/www/html
-sudo php -f bin/magento setup:install --base-url=http://$IP/ --backend-frontname=admin --db-host=localhost --db-name=magento --db-user=root --db-password=oZakNGmcxHjto97x --admin-firstname=Magento --admin-lastname=User --admin-email=admin@domain.com --admin-user=admin --admin-password=abcd2017 --language=en_US --currency=AUD --timezone=Australia/Sydney --use-rewrites=1
+sudo php -f bin/magento setup:install --base-url=http://$IP/ --backend-frontname=admin --db-host=localhost --db-name=magento --db-user=root --db-password=$MYSQL_PASSWORD --admin-firstname=Magento --admin-lastname=User --admin-email=admin@domain.com --admin-user=admin --admin-password=$ROOT_PASSWORD --language=en_US --currency=AUD --timezone=Australia/Sydney --use-rewrites=1
 
 printf "Set home directory permission\n"
 sudo chmod -R 777 /var/www/html/
