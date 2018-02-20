@@ -2,6 +2,30 @@
 printf "Please enter IP address for this server:"
 read IP
 
+printf "Please enter username for FTP:"
+read FTP_USERNAME
+
+printf "Please enter password for FTP:"
+read FTP_PASSWORD
+
+printf "Please enter your first name for Magento admin:"
+read ADMIN_FIRSTNAME
+
+printf "Please enter your last name for Magento admin:"
+read ADMIN_LASTNAME
+
+printf "Please enter your email for Magento admin:"
+read ADMIN_EMAIL
+
+printf "Please enter username for Magento admin:"
+read ADMIN_USERNAME
+
+printf "Please enter password for Magento admin:"
+read ADMIN_PASSWORD
+
+printf "Please enter password for MySQL root user:"
+read MYSQL_PASSWORD
+
 printf "Update packages\n"
 sudo yum update -y
 
@@ -214,18 +238,7 @@ gzip_comp_level 6;
 gzip_min_length 1100;
 gzip_buffers 16 8k;
 gzip_proxied any;
-gzip_types
-    text/plain
-    text/css
-    text/js
-    text/xml
-    text/javascript
-    application/javascript
-    application/x-javascript
-    application/json
-    application/xml
-    application/xml+rss
-    image/svg+xml;
+gzip_types *;
 gzip_vary on;
 
 # Banned locations (only reached if the earlier PHP entry point regexes don't match)
@@ -259,7 +272,7 @@ printf "Service auto start\n"
 sudo chkconfig nginx on
 sudo chkconfig mysqld on
 sudo chkconfig vsftpd on
-sudo chkconfig php-fpm start
+sudo chkconfig php-fpm on
 
 printf "Setting mysql server\n"
 
@@ -287,49 +300,31 @@ expect eof
 
 echo "$SECURE_MYSQL"
 
-#mysql_secure_installation <<EOF
-#
-#y
-#oZakNGmcxHjto97x
-#oZakNGmcxHjto97x
-#y
-#n
-#n
-#y
-#EOF
-
 printf "Create database for Magento\n"
 mysql -u root -p$MYSQL_PASSWORD -e "CREATE DATABASE magento;"
 
 printf "Set user group\n"
-sudo groupadd nginx
+#sudo groupadd nginx
 sudo usermod -a -G nginx ec2-user
 
 printf "Adding FTP user...\n"
-sudo useradd -g nginx -d /var/www/ -s /bin/bash -p $(echo $ROOT_PASSWORD | openssl passwd -1 -stdin) magento
-
-#sudo adduser -G nginx magento
-#sudo passwd magento <<EOF
-#abcd2017
-#abcd2017
-#EOF
+sudo useradd -g nginx -d /var/www/ -s /bin/bash -p $(echo $FTP_PASSWORD | openssl passwd -1 -stdin) $FTP_USERNAME
 
 printf "Set user home directory\n"
-#sudo usermod -d /var/www/ magento
-sudo chown -R root:nginx /var/www
+sudo chown -R nginx:nginx /var/www
 
 printf "Download Magento to home directory\n"
 wget https://github.com/nothywu/magento-2-auto-deployment/blob/master/Magento-CE-2.2.2-2017-12-11-09-25-03.tar.bz2
 
 printf "Extract Magento to home directory\n"
-sudo tar xjf Magento-CE-2.1.8.tar.bz2 -C /var/www/html
+sudo tar xjf Magento-CE-2.2.2-2017-12-11-09-25-03.tar.bz2 -C /var/www/html
 
 printf "Set home directory permission\n"
 sudo chmod -R 777 /var/www
 
 printf "Install Magento\n"
 cd /var/www/html
-sudo php -f bin/magento setup:install --base-url=http://$IP/ --backend-frontname=admin --db-host=localhost --db-name=magento --db-user=root --db-password=$MYSQL_PASSWORD --admin-firstname=Magento --admin-lastname=User --admin-email=admin@domain.com --admin-user=admin --admin-password=$ROOT_PASSWORD --language=en_US --currency=AUD --timezone=Australia/Sydney --use-rewrites=1
+sudo php -f bin/magento setup:install --base-url=http://$IP/ --backend-frontname=admin --db-host=localhost --db-name=magento --db-user=root --db-password=$MYSQL_PASSWORD --admin-firstname=$ADMIN_FIRSTNAME --admin-lastname=$ADMIN_LASTNAME --admin-email=$ADMIN_EMAIL --admin-user=$ADMIN_USERNAME --admin-password=$ADMIN_PASSWORD --language=en_US --currency=AUD --timezone=Australia/Sydney --use-rewrites=1
 
 printf "Set home directory permission\n"
 sudo chmod -R 777 /var/www/html/
