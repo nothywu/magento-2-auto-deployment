@@ -33,15 +33,12 @@ printf "Install NGINX, PHP 7.0 & MySql 5.6\n"
 sudo yum install -y nginx php70 mysql56-server
 
 printf "Install PHP extensions\n"
-sudo yum install -y php70-mysqlnd php70-mcrypt php70-intl php70-mbstring php70-gzip php70-gd2 php70-zip php70-gd php70-xml php70-pdo php70-pecl-apcu php70-opcache php70-fpm
+sudo yum install -y php70-mysqlnd php70-mcrypt php70-intl php70-mbstring php70-gzip php70-gd2 php70-zip php70-gd php70-xml php70-pdo php70-pecl-apcu php70-opcache php70-fpm php70-soap
 sudo yum install -y expect
 
 printf "Install composer\n"
 sudo curl -sS https://getcomposer.org/installer | sudo php
 sudo mv composer.phar /usr/local/bin/composer
-
-ROOT_PASSWORD=abcd1234
-MYSQL_PASSWORD=abcd1234
 
 printf "Config nginx\n"
 ################### nginx configuration ###################
