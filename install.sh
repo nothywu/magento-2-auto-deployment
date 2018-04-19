@@ -335,3 +335,4 @@ sudo php -f bin/magento setup:install --base-url=http://$IP/ --backend-frontname
 
 printf "Set home directory permission\n"
 sudo chmod -R 777 /var/www/html/
+sudo chown -R nginx:nginx /var/lib/php/7.0/session/
