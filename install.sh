@@ -30,10 +30,10 @@ printf "Update packages\n"
 sudo yum update -y
 
 printf "Install NGINX, PHP 7.0 & MySql 5.6\n"
-sudo yum install -y nginx php70 mysql56-server
+sudo yum install -y nginx php72 mysql56-server
 
 printf "Install PHP extensions\n"
-sudo yum install -y php70-mysqlnd php70-mcrypt php70-intl php70-mbstring php70-gzip php70-gd2 php70-zip php70-gd php70-xml php70-pdo php70-pecl-apcu php70-opcache php70-fpm php70-soap
+sudo yum install -y php72-mysqlnd php72-mcrypt php72-intl php72-mbstring php72-gzip php72-gd2 php72-zip php72-gd php72-xml php72-pdo php72-pecl-apcu php72-opcache php72-fpm php72-soap php72-bcmath
 sudo yum install -y expect
 
 printf "Install composer\n"
@@ -321,10 +321,10 @@ printf "Set user home directory\n"
 sudo chown -R nginx:nginx /var/www
 
 printf "Download Magento to home directory\n"
-wget https://raw.githubusercontent.com/nothywu/magento-2-auto-deployment/master/Magento-CE-2.2.3-2018-02-23-10-32-04.tar.bz2
+wget https://raw.githubusercontent.com/nothywu/magento-2-auto-deployment/master/Magento-CE-2.3.0-2018-11-27-10-18-29.tar.bz2
 
 printf "Extract Magento to home directory\n"
-sudo tar xjf Magento-CE-2.2.3-2018-02-23-10-32-04.tar.bz2 -C /var/www/html
+sudo tar xjf Magento-CE-2.3.0-2018-11-27-10-18-29.tar.bz2 -C /var/www/html
 
 printf "Set home directory permission\n"
 sudo chmod -R 777 /var/www
@@ -335,4 +335,5 @@ sudo php -f bin/magento setup:install --base-url=http://$IP/ --backend-frontname
 
 printf "Set home directory permission\n"
 sudo chmod -R 777 /var/www/html/
-sudo chown -R nginx:nginx /var/lib/php/7.0/session/
+sudo chown -R nginx:nginx /var/lib/php/7.2/session/
+sudo chmod -R 777 /var/lib/php/7.2/session/
