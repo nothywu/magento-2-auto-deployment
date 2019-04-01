@@ -74,7 +74,7 @@ http {
 
 #   Settings for a TLS enabled server.
 #    server {
-#        listen                     443;
+#        listen                     443 ssl;
 #        server_name                localhost;
 #        set \$MAGE_ROOT            /var/www/html;
 #        ssl_certificate            /etc/pki/nginx/server.crt;
@@ -82,7 +82,7 @@ http {
 #        ssl_session_cache          shared:SSL:1m;
 #        ssl_session_timeout        10m;
 #        ssl_protocols              TLSv1 TLSv1.1 TLSv1.2;
-#        ssl_ciphers                'ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:E$
+#        ssl_ciphers                ''
 #        ssl_dhparam                /etc/pki/nginx/dh.pem;
 #        ssl_prefer_server_ciphers  on;
 #        client_max_body_size       10m;
