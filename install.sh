@@ -29,7 +29,7 @@ read MYSQL_PASSWORD
 printf "Update packages\n"
 sudo yum update -y
 
-printf "Install NGINX, PHP 7.0 & MySql 5.6\n"
+printf "Install NGINX, PHP 7.2 & MySql 5.6\n"
 sudo yum install -y nginx php72 mysql56-server
 
 printf "Install PHP extensions\n"
@@ -255,8 +255,8 @@ sudo rm -f /etc/nginx/nginx.conf
 sudo cp -f ~/nginx.conf /etc/nginx/nginx.conf
 sudo cp -f ~/magento.conf /etc/nginx/default.d/magento.conf
 
-sudo sed -i "s/user = apache/user = nginx/g" /etc/php-fpm-7.0.d/www.conf
-sudo sed -i "s/group = apache/group = nginx/g" /etc/php-fpm-7.0.d/www.conf
+sudo sed -i "s/user = apache/user = nginx/g" /etc/php-fpm-7.2.d/www.conf
+sudo sed -i "s/group = apache/group = nginx/g" /etc/php-fpm-7.2.d/www.conf
 
 printf "Install vsftp\n"
 sudo yum install -y vsftpd
